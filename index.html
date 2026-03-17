@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <style>
+      .note h3 {
+        color: red;
+      }
+    </style>
+    <title>Static Template</title>
+
+    <script type="text/javascript">
+      var notes = [];
+
+      function setup() {
+        document.getElementById("addnote").addEventListener("click", addNote);
+        let storedNotes = localStorage.getItem("notes");
+        if (storedNotes) {
+          notes = JSON.parse(storedNotes);
+          for (var i = 0; i < notes.length; i += 1) {
+            createNoteDiv(notes[i].title, notes[i].note);
+          }
+        }
+      }
+
+      function addNote() {
+        let titleElement = document.getElementById("title");
+        let noteElement = document.getElementById("note");
+        let title = titleElement.value;
+        let note = noteElement.value;
+        console.log("addnote", title, note);
+
+        createNoteDiv(title, note);
+        notes.push({
+          title: title,
+          note: note,
+        });
+        console.log(notes);
+        localStorage.setItem("notes", JSON.stringify(notes));
+      }
+
+      function createNoteDiv(title, note) {
+        let div = document.createElement("div");
+        div.setAttribute("class", "note");
+
+        let titleElement = document.createElement("h3");
+        titleElement.textContent = title;
+        div.append(titleElement);
+
+        let noteElement = document.createElement("p");
+        noteElement.textContent = note;
+        div.append(noteElement);
+
+        document.getElementById("notes").appendChild(div);
+      }
+      console.log("whatever");
+      window.addEventListener("load", setup);
+    </script>
+  </head>
+  <body>
+    <h1>Notes to Self</h1>
+    <p>Notes:</p>
+    <ol id="notes"></ol>
+    <hr />
+    <p><em>Add a new note:</em></p>
+    Title: <input type="text" id="title" /><br />
+    Note: <textarea id="note"></textarea><br />
+    <button id="addnote">Add Note</button>
+  </body>
+</html>
